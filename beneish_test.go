@@ -8,26 +8,11 @@ import (
 )
 
 func TestDsri(t *testing.T) {
-	expected, err := decimal.NewFromString("0.8333")
-
-	if err != nil {
-		t.Error(err)
-	}
-
 	result := dsri(90, 100, 150, 200)
-
-	if !result.Equals(expected) {
-		fmt.Println(result)
-		t.Errorf("expected %q, got %q", expected, result)
-	}
-
-	expected, err = decimal.NewFromString("1.92")
-
+	expected, err := decimal.NewFromString("0.8333")
 	if err != nil {
 		t.Error(err)
 	}
-
-	result = dsri(50, 120, 400, 500)
 
 	if !result.Equals(expected) {
 		fmt.Println(result)
@@ -36,26 +21,11 @@ func TestDsri(t *testing.T) {
 }
 
 func TestGmi(t *testing.T) {
-	expected, err := decimal.NewFromString("0.6667")
-
-	if err != nil {
-		t.Error(err)
-	}
-
 	result := gmi(90, 100, 60, 50)
-
-	if !result.Equals(expected) {
-		fmt.Println(result)
-		t.Errorf("expected %q, got %q", expected, result)
-	}
-
-	expected, err = decimal.NewFromString("1.5000")
-
+	expected, err := decimal.NewFromString("0.6667")
 	if err != nil {
 		t.Error(err)
 	}
-
-	result = gmi(100, 90, 50, 60)
 
 	if !result.Equals(expected) {
 		fmt.Println(result)
@@ -64,13 +34,24 @@ func TestGmi(t *testing.T) {
 }
 
 func TestAqi(t *testing.T) {
+	result := aqi(100, 200, 60, 600, 130, 210, 60, 700)
 	expected, err := decimal.NewFromString("1.0714")
-
 	if err != nil {
 		t.Error(err)
 	}
 
-	result := aqi(100, 200, 60, 600, 130, 210, 60, 700)
+	if !result.Equals(expected) {
+		fmt.Println(result)
+		t.Errorf("expected %q, got %q", expected, result)
+	}
+}
+
+func TestSgi(t *testing.T) {
+	result := sgi(1200, 1300)
+	expected, err := decimal.NewFromString("1.0833")
+	if err != nil {
+		t.Error(err)
+	}
 
 	if !result.Equals(expected) {
 		fmt.Println(result)
@@ -79,13 +60,11 @@ func TestAqi(t *testing.T) {
 }
 
 func TestDepi(t *testing.T) {
+	result := depi(1000, 600, 1200, 900)
 	expected, err := decimal.NewFromString("1.0938")
-
 	if err != nil {
 		t.Error(err)
 	}
-
-	result := depi(1000, 600, 1200, 900)
 
 	if !result.Equals(expected) {
 		fmt.Println(result)
@@ -94,13 +73,11 @@ func TestDepi(t *testing.T) {
 }
 
 func TestLvgi(t *testing.T) {
+	result := lvgi(1200, 400, 1800, 1300, 450, 1700)
 	expected, err := decimal.NewFromString("1.1581")
-
 	if err != nil {
 		t.Error(err)
 	}
-
-	result := lvgi(1200, 400, 1800, 1300, 450, 1700)
 
 	if !result.Equals(expected) {
 		fmt.Println(result)
@@ -109,13 +86,11 @@ func TestLvgi(t *testing.T) {
 }
 
 func TestTata(t *testing.T) {
+	result := tata(300, 400, 1200)
 	expected, err := decimal.NewFromString("0.5833")
-
 	if err != nil {
 		t.Error(err)
 	}
-
-	result := tata(300, 400, 1200)
 
 	if !result.Equals(expected) {
 		fmt.Println(result)
