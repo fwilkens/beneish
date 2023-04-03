@@ -6,11 +6,7 @@ import (
 
 /*
 https://en.wikipedia.org/wiki/Beneish_M-score
-The Beneish M-score is calculated using 8 variables (financial ratios):[1][2]
-
-The formula to calculate the M-score is:[1]
-
-M-score = −4.84 + 0.92 × DSRI + 0.528 × GMI + 0.404 × AQI + 0.892 × SGI + 0.115 × DEPI −0.172 × SGAI + 4.679 × TATA − 0.327 × LVGI
+The Beneish M-score is calculated using 8 variables (financial ratios)
 */
 
 // Days Sales in Receivables Index
@@ -55,15 +51,87 @@ func aqi(
 
 // Sales Growth Index (SGI)
 // SGI = Sales t / Sales t-1
+func sgi(prevSales int64, currSales int64) decimal.Decimal {
+	return decimal.New(currSales, 0).DivRound(decimal.New(prevSales, 0), 4)
+}
 
 // Depreciation Index (DEPI)
 // DEPI = (Depreciation t-1/ (PP&E t-1 + Depreciation t-1)) / (Depreciationt / (PP&Et + Depreciationt))
+// result := depi(1000, 600, 1200, 900)
+func depi(prevDepr int64, prevPPE int64, currDepr int64, currPPE int64) decimal.Decimal {
+	numerator := decimal.New(prevDepr, 0).Div(decimal.New(prevPPE+prevDepr, 0))
+	denominator := decimal.New(currDepr, 0).Div(decimal.New(currPPE+currDepr, 0))
+
+	return numerator.DivRound(denominator, 4)
+}
 
 // Sales General and Administrative Expenses Index (SGAI)
 // SGAI = (SG&A Expense t / Sales t) / (SG&A Expense t-1 / Sales t-1)
+func sgai(prevSGA int64, prevSales int64, currSGA int64, currSales int64) decimal.Decimal {
+	numerator := decimal.New(currSGA, 0).Div(decimal.New(currSales, 0))
+	denominator := decimal.New(prevSGA, 0).Div(decimal.New(prevSales, 0))
+
+	return numerator.DivRound(denominator, 4)
+}
 
 // Leverage Index (LVGI)
 // LVGI = [(Current Liabilities t + Total Long Term Debt t) / Total Assets t] / [(Current Liabilities t-1 + Total Long Term Debt t-1) / Total Assets t-1]
+func lvgi(
+	prevLiabilities int64,
+	prevTLTD int64,
+	prevTotalAssets int64,
+	currLiabilities int64,
+	currTLTD int64,
+	currTotalAssets int64,
+) decimal.Decimal {
+	numerator := decimal.New(currLiabilities+currTLTD, 0).Div(decimal.New(currTotalAssets, 0))
+	denominator := decimal.New(prevLiabilities+prevTLTD, 0).Div(decimal.New(prevTotalAssets, 0))
+
+	return numerator.DivRound(denominator, 4)
+}
 
 // Total Accruals to Total Assets (TATA)
 // TATA = (Income from Continuing Operations t - Cash Flows from Operations t) / Total Assets t
+func tata(currICO int64, currCFO int64, currTotalAssets int64) decimal.Decimal {
+	return decimal.New(currICO+currCFO, 0).DivRound(decimal.New(currTotalAssets, 0), 4)
+}
+
+// The formula to calculate the M-score is:
+
+// M-score = −4.84 + 0.92 × DSRI + 0.528 × GMI + 0.404 × AQI + 0.892 × SGI + 0.115 × DEPI −0.172 × SGAI + 4.679 × TATA − 0.327 × LVGI
+/*
+func mscore(
+	prevAssets int64,
+	prevSecurities int64,
+	prevPPE int64,
+	prevTotalAssets int64,
+	prevSales int64,
+	prevDepr int64,
+	prevSGA int64,
+	prevLiabilities int64,
+	prevTLTD int64,
+	currAssets int64,
+	currSecurities int64,
+	currPPE int64,
+	currTotalAssets int64,
+	currSales int64,
+	currDepr int64,
+	currSGA int64,
+	currLiabilities int64,
+	currTLTD int64,
+	currICO int64,
+	currCFO int64,
+) decimal.Decimal {
+
+		−4.84 +
+		0.92 × DSRI +
+		0.528 × GMI +
+		0.404 × AQI +
+		0.892 × SGI +
+		0.115 × DEPI −
+		0.172 × SGAI +
+		4.679 × TATA −
+		0.327 × LVGI
+
+}
+*/

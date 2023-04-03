@@ -35,7 +35,6 @@ func TestDsri(t *testing.T) {
 	}
 }
 
-// GMI = [(Sales t-1 - COGS t-1) / Sales t-1] / [(Sales t - COGSt) / Sales t]
 func TestGmi(t *testing.T) {
 	expected, err := decimal.NewFromString("0.6667")
 
@@ -72,6 +71,51 @@ func TestAqi(t *testing.T) {
 	}
 
 	result := aqi(100, 200, 60, 600, 130, 210, 60, 700)
+
+	if !result.Equals(expected) {
+		fmt.Println(result)
+		t.Errorf("expected %q, got %q", expected, result)
+	}
+}
+
+func TestDepi(t *testing.T) {
+	expected, err := decimal.NewFromString("1.0938")
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	result := depi(1000, 600, 1200, 900)
+
+	if !result.Equals(expected) {
+		fmt.Println(result)
+		t.Errorf("expected %q, got %q", expected, result)
+	}
+}
+
+func TestLvgi(t *testing.T) {
+	expected, err := decimal.NewFromString("1.1581")
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	result := lvgi(1200, 400, 1800, 1300, 450, 1700)
+
+	if !result.Equals(expected) {
+		fmt.Println(result)
+		t.Errorf("expected %q, got %q", expected, result)
+	}
+}
+
+func TestTata(t *testing.T) {
+	expected, err := decimal.NewFromString("0.5833")
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	result := tata(300, 400, 1200)
 
 	if !result.Equals(expected) {
 		fmt.Println(result)
