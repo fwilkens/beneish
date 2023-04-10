@@ -4,6 +4,18 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type mscore struct {
+	dsri  decimal.Decimal
+	gmi   decimal.Decimal
+	aqi   decimal.Decimal
+	sgi   decimal.Decimal
+	depi  decimal.Decimal
+	sgai  decimal.Decimal
+	lvgi  decimal.Decimal
+	tata  decimal.Decimal
+	score decimal.Decimal
+}
+
 /*
 https://en.wikipedia.org/wiki/Beneish_M-score
 The Beneish M-score is calculated using 8 variables (financial ratios)
@@ -57,7 +69,6 @@ func sgi(prevSales int64, currSales int64) decimal.Decimal {
 
 // Depreciation Index (DEPI)
 // DEPI = (Depreciation t-1/ (PP&E t-1 + Depreciation t-1)) / (Depreciationt / (PP&Et + Depreciationt))
-// result := depi(1000, 600, 1200, 900)
 func depi(prevDepr int64, prevPPE int64, currDepr int64, currPPE int64) decimal.Decimal {
 	numerator := decimal.New(prevDepr, 0).Div(decimal.New(prevPPE+prevDepr, 0))
 	denominator := decimal.New(currDepr, 0).Div(decimal.New(currPPE+currDepr, 0))
@@ -96,12 +107,32 @@ func tata(currICO int64, currCFO int64, currTotalAssets int64) decimal.Decimal {
 	return decimal.New(currICO+currCFO, 0).DivRound(decimal.New(currTotalAssets, 0), 4)
 }
 
-// The formula to calculate the M-score is:
-
-// M-score = −4.84 + 0.92 × DSRI + 0.528 × GMI + 0.404 × AQI + 0.892 × SGI + 0.115 × DEPI −0.172 × SGAI + 4.679 × TATA − 0.327 × LVGI
 /*
-func mscore(
+M-score =
+−4.84 +
+0.92 × DSRI +
+0.528 × GMI +
+0.404 × AQI +
+0.892 × SGI +
+0.115 × DEPI −
+0.172 × SGAI +
+4.679 × TATA −
+0.327 × LVGI
+*/
+const BaseMScore = -4.84
+const DSRImod = 0.92
+const GMImod = 0.528
+const AQImod = 0.404
+const SGImod = 0.892
+const DEPImod = 0.115
+const SGAImod = 0.172
+const TATAmod = 4.679
+const LVGImod = 0.327
+
+func mScoreCalc(
+	prevNetReceivables int64,
 	prevAssets int64,
+	prevCogs int64,
 	prevSecurities int64,
 	prevPPE int64,
 	prevTotalAssets int64,
@@ -110,7 +141,9 @@ func mscore(
 	prevSGA int64,
 	prevLiabilities int64,
 	prevTLTD int64,
+	currNetReceivables int64,
 	currAssets int64,
+	currCogs int64,
 	currSecurities int64,
 	currPPE int64,
 	currTotalAssets int64,
@@ -121,17 +154,36 @@ func mscore(
 	currTLTD int64,
 	currICO int64,
 	currCFO int64,
-) decimal.Decimal {
+) *mscore {
+	dsri := dsri(prevNetReceivables, currNetReceivables, prevSales, currSales)
+	gmi := gmi(prevSales, currSales, prevCogs, currCogs)
+	aqi := aqi(prevAssets, prevSecurities, prevPPE, prevTotalAssets, currAssets, currSecurities, currPPE, currTotalAssets)
+	sgi := sgi(prevSales, currSales)
+	sgai := sgai(prevSGA, prevSales, currSGA, currSales)
+	depi := depi(prevDepr, prevPPE, currDepr, currPPE)
+	tata := tata(currICO, currCFO, currTotalAssets)
+	lvgi := lvgi(prevLiabilities, prevTLTD, prevTotalAssets, currLiabilities, currTLTD, currTotalAssets)
 
-		−4.84 +
-		0.92 × DSRI +
-		0.528 × GMI +
-		0.404 × AQI +
-		0.892 × SGI +
-		0.115 × DEPI −
-		0.172 × SGAI +
-		4.679 × TATA −
-		0.327 × LVGI
+	score := decimal.NewFromFloat(BaseMScore)
+	score = score.Add(decimal.NewFromFloat(DSRImod).Mul(dsri))
+	score = score.Add(decimal.NewFromFloat(GMImod).Mul(gmi))
+	score = score.Add(decimal.NewFromFloat(AQImod).Mul(aqi))
+	score = score.Add(decimal.NewFromFloat(SGImod).Mul(sgi))
+	score = score.Sub(decimal.NewFromFloat(SGAImod).Mul(sgai))
+	score = score.Add(decimal.NewFromFloat(DEPImod).Mul(depi))
+	score = score.Add(decimal.NewFromFloat(TATAmod).Mul(tata))
+	score = score.Sub(decimal.NewFromFloat(LVGImod).Mul(lvgi))
 
+	m := mscore{
+		dsri:  dsri,
+		gmi:   gmi,
+		aqi:   aqi,
+		sgi:   sgi,
+		depi:  depi,
+		sgai:  sgai,
+		lvgi:  lvgi,
+		tata:  tata,
+		score: score,
+	}
+	return &m
 }
-*/
