@@ -35,7 +35,7 @@ func TestGmi(t *testing.T) {
 
 func TestAqi(t *testing.T) {
 	result := aqi(100, 60, 600, 130, 60, 700)
-	expected, err := decimal.NewFromString("1.0714")
+	expected, err := decimal.NewFromString("0.9935")
 	if err != nil {
 		t.Error(err)
 	}
@@ -86,8 +86,8 @@ func TestLvgi(t *testing.T) {
 }
 
 func TestTata(t *testing.T) {
-	result := tata(300, 400, 1200)
-	expected, err := decimal.NewFromString("0.5833")
+	result := tata(300, 50, 1200)
+	expected, err := decimal.NewFromString("0.2083")
 	if err != nil {
 		t.Error(err)
 	}

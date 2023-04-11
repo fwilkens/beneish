@@ -100,7 +100,7 @@ func lvgi(
 // Total Accruals to Total Assets (TATA)
 // TATA = (Income from Continuing Operations t - Cash Flows from Operations t) / Total Assets t
 func tata(currICO int64, currCFO int64, currTotalAssets int64) decimal.Decimal {
-	return decimal.New(currICO+currCFO, 0).DivRound(decimal.New(currTotalAssets, 0), 4)
+	return decimal.New(currICO-currCFO, 0).DivRound(decimal.New(currTotalAssets, 0), 4)
 }
 
 /*
@@ -166,7 +166,7 @@ func mScoreCalc(
 	score = score.Sub(decimal.NewFromFloat(SGAImod).Mul(sgai))
 	score = score.Add(decimal.NewFromFloat(DEPImod).Mul(depi))
 	score = score.Add(decimal.NewFromFloat(TATAmod).Mul(tata))
-	score = score.Sub(decimal.NewFromFloat(LVGImod).Mul(lvgi))
+	score = score.Sub(decimal.NewFromFloat(LVGImod).Mul(lvgi)).Round(4)
 
 	m := mscore{
 		dsri:  dsri,
