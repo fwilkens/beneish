@@ -40,25 +40,21 @@ func gmi(prevSales int64, currSales int64, prevCogs int64, currCogs int64) decim
 }
 
 // Asset Quality Index (AQI)
-// AQI = [1 - (Current Assets t + PP&E t + Securities t) / Total Assets t] / = [1 - ((Current Assets t-1 + PP&E t-1 + Securities t-1) / Total Assets t-1)]
+// AQI = [1 - (Current Assets t + PP&E t) / Total Assets t] / = [1 - ((Current Assets t-1 + PP&E t-1) / Total Assets t-1)]
 func aqi(
 	prevAssets int64,
-	prevSecurities int64,
 	prevPPE int64,
 	prevTotalAssets int64,
 	currAssets int64,
-	currSecurities int64,
 	currPPE int64,
 	currTotalAssets int64,
 ) decimal.Decimal {
-	currSum := currAssets + currSecurities + currPPE
-	currRatio := decimal.New(currSum, 0).Div(decimal.New(currTotalAssets, 0))
-	prevSum := prevAssets + prevPPE + prevSecurities
-	prevRatio := decimal.New(prevSum, 0).Div(decimal.New(prevTotalAssets, 0))
-	numerator := decimal.New(1, 0).Sub(currRatio)
-	denominator := decimal.New(1, 0).Sub(prevRatio)
+	currSum := currAssets + currPPE
+	currIndex := decimal.NewFromInt(1).Sub(decimal.NewFromInt(currSum).Div(decimal.NewFromInt(currTotalAssets)))
+	prevSum := prevAssets + prevPPE
+	prevIndex := decimal.NewFromInt(1).Sub(decimal.NewFromInt(prevSum).Div(decimal.NewFromInt(prevTotalAssets)))
 
-	return numerator.DivRound(denominator, 4)
+	return currIndex.DivRound(prevIndex, 4)
 }
 
 // Sales Growth Index (SGI)
@@ -133,7 +129,6 @@ func mScoreCalc(
 	prevNetReceivables int64,
 	prevAssets int64,
 	prevCogs int64,
-	prevSecurities int64,
 	prevPPE int64,
 	prevTotalAssets int64,
 	prevSales int64,
@@ -144,7 +139,6 @@ func mScoreCalc(
 	currNetReceivables int64,
 	currAssets int64,
 	currCogs int64,
-	currSecurities int64,
 	currPPE int64,
 	currTotalAssets int64,
 	currSales int64,
@@ -157,7 +151,7 @@ func mScoreCalc(
 ) *mscore {
 	dsri := dsri(prevNetReceivables, currNetReceivables, prevSales, currSales)
 	gmi := gmi(prevSales, currSales, prevCogs, currCogs)
-	aqi := aqi(prevAssets, prevSecurities, prevPPE, prevTotalAssets, currAssets, currSecurities, currPPE, currTotalAssets)
+	aqi := aqi(prevAssets, prevPPE, prevTotalAssets, currAssets, currPPE, currTotalAssets)
 	sgi := sgi(prevSales, currSales)
 	sgai := sgai(prevSGA, prevSales, currSGA, currSales)
 	depi := depi(prevDepr, prevPPE, currDepr, currPPE)

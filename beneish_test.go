@@ -34,7 +34,7 @@ func TestGmi(t *testing.T) {
 }
 
 func TestAqi(t *testing.T) {
-	result := aqi(100, 200, 60, 600, 130, 210, 60, 700)
+	result := aqi(100, 60, 600, 130, 60, 700)
 	expected, err := decimal.NewFromString("1.0714")
 	if err != nil {
 		t.Error(err)
@@ -98,75 +98,74 @@ func TestTata(t *testing.T) {
 	}
 }
 
+// Using the example of Sunbeam, from Beneish
 func TestMscore(t *testing.T) {
 	mscore := mScoreCalc(
-		9692,   // prevNetReceivables
-		60197,  // prevAssets
-		103134, // prevCogs
-		737,    // prevSecurities
-		68573,  // prevPPE
-		131310, // prevTotalAssets
-		177866, // prevSales
-		9166,   // prevDepr
-		61612,  // prevSGA
-		57883,  // prevLiabilities
-		37926,  // prevTLTD
-		13310,  // currNetReceivables
-		75101,  // currAssets
-		127056, // currCogs
-		942,    // currSecurities
-		95770,  // currPPE
-		162648, // currTotalAssets
-		232887, // currSales
-		12575,  // currDepr
-		81014,  // currSGA
-		63391,  // currLiabilities
-		39787,  // currTLTD
-		10073,  // currICO
-		30723,  // currCFO
+		2134,  // prevNetReceivables
+		6242,  // prevAssets
+		9006,  // prevCogs
+		2201,  // prevPPE
+		10727, // prevTotalAssets
+		9842,  // prevSales
+		474,   // prevDepr
+		2140,  // prevSGA
+		2716,  // prevLiabilities
+		2011,  // prevTLTD
+		2956,  // currNetReceivables
+		6580,  // currAssets
+		8377,  // currCogs
+		2409,  // currPPE
+		11203, // currTotalAssets
+		11682, // currSales
+		386,   // currDepr
+		1310,  // currSGA
+		1981,  // currLiabilities
+		1946,  // currTLTD
+		1094,  // currICO
+		-82,   // currCFO
 	)
 
-	dsriExpected, _ := decimal.NewFromString("1.0488")
+	dsriExpected, _ := decimal.NewFromString("1.1670")
 	if !mscore.dsri.Equals(dsriExpected) {
 		t.Errorf("expected dsri of %q, got %q", dsriExpected, mscore.dsri)
 	}
 
-	gmiExpected, _ := decimal.NewFromString("0.9246")
+	gmiExpected, _ := decimal.NewFromString("0.3002")
 	if !mscore.gmi.Equals(gmiExpected) {
 		t.Errorf("expected gmi of %q, got %q", gmiExpected, mscore.gmi)
 	}
 
-	aqiExpected, _ := decimal.NewFromString("1.07")
+	aqiExpected, _ := decimal.NewFromString("0.9282")
 	if !mscore.aqi.Equals(aqiExpected) {
 		t.Errorf("expected aqi of %q, got %q", aqiExpected, mscore.aqi)
 	}
 
-	sgiExpected, _ := decimal.NewFromString("1.3093")
+	sgiExpected, _ := decimal.NewFromString("1.1870")
 	if !mscore.sgi.Equals(sgiExpected) {
 		t.Errorf("expected sgi of %q, got %q", sgiExpected, mscore.sgi)
 	}
 
-	sgaiExpected, _ := decimal.NewFromString("1.0043")
+	sgaiExpected, _ := decimal.NewFromString("0.5157")
 	if !mscore.sgai.Equals(sgaiExpected) {
 		t.Errorf("expected sgai of %q, got %q", sgaiExpected, mscore.sgai)
 	}
 
-	depiExpected, _ := decimal.NewFromString("1.0159")
+	depiExpected, _ := decimal.NewFromString("1.2831")
 	if !mscore.depi.Equals(depiExpected) {
 		t.Errorf("expected depi of %q, got %q", depiExpected, mscore.depi)
 	}
 
-	tataExpected, _ := decimal.NewFromString("-0.13")
+	tataExpected, _ := decimal.NewFromString("0.1050")
 	if !mscore.tata.Equals(tataExpected) {
 		t.Errorf("expected tata of %q, got %q", tataExpected, mscore.tata)
 	}
 
-	lvgiExpected, _ := decimal.NewFromString("0.91")
+	lvgiExpected, _ := decimal.NewFromString("0.7955")
 	if !mscore.lvgi.Equals(lvgiExpected) {
 		t.Errorf("expected lvgi of %q, got %q", lvgiExpected, mscore.lvgi)
 	}
 
-	mExpected, _ := decimal.NewFromString("-2.734")
+	mExpected, _ := decimal.NewFromString("-1.8840")
 
 	if !mscore.score.Equals(mExpected) {
 		fmt.Println(mscore.score)
