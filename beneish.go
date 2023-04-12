@@ -24,8 +24,8 @@ The Beneish M-score is calculated using 8 variables (financial ratios)
 // Days Sales in Receivables Index
 // (DSRI) DSRI = (Net Receivables t / Sales t) / (Net Receivables t-1 / Sales t-1)
 func dsri(prevNetReceivables int64, currNetReceivables int64, prevSales int64, currSales int64) decimal.Decimal {
-	numerator := decimal.New(currNetReceivables, 0).Div(decimal.New(currSales, 0))
-	denominator := decimal.New(prevNetReceivables, 0).Div(decimal.New(prevSales, 0))
+	numerator := decimal.NewFromInt(currNetReceivables).Div(decimal.NewFromInt(currSales))
+	denominator := decimal.NewFromInt(prevNetReceivables).Div(decimal.NewFromInt(prevSales))
 
 	return numerator.DivRound(denominator, 4)
 }
@@ -33,8 +33,8 @@ func dsri(prevNetReceivables int64, currNetReceivables int64, prevSales int64, c
 // Gross Margin Index (GMI)
 // GMI = [(Sales t-1 - COGS t-1) / Sales t-1] / [(Sales t - COGSt) / Sales t]
 func gmi(prevSales int64, currSales int64, prevCogs int64, currCogs int64) decimal.Decimal {
-	numerator := decimal.New(prevSales-prevCogs, 0).Div(decimal.New(prevSales, 0))
-	denominator := decimal.New(currSales-currCogs, 0).Div(decimal.New(currSales, 0))
+	numerator := decimal.NewFromInt(prevSales - prevCogs).Div(decimal.NewFromInt(prevSales))
+	denominator := decimal.NewFromInt(currSales - currCogs).Div(decimal.NewFromInt(currSales))
 
 	return numerator.DivRound(denominator, 4)
 }
@@ -60,14 +60,14 @@ func aqi(
 // Sales Growth Index (SGI)
 // SGI = Sales t / Sales t-1
 func sgi(prevSales int64, currSales int64) decimal.Decimal {
-	return decimal.New(currSales, 0).DivRound(decimal.New(prevSales, 0), 4)
+	return decimal.NewFromInt(currSales).DivRound(decimal.NewFromInt(prevSales), 4)
 }
 
 // Depreciation Index (DEPI)
 // DEPI = (Depreciation t-1/ (PP&E t-1 + Depreciation t-1)) / (Depreciationt / (PP&Et + Depreciationt))
 func depi(prevDepr int64, prevPPE int64, currDepr int64, currPPE int64) decimal.Decimal {
-	numerator := decimal.New(prevDepr, 0).Div(decimal.New(prevPPE+prevDepr, 0))
-	denominator := decimal.New(currDepr, 0).Div(decimal.New(currPPE+currDepr, 0))
+	numerator := decimal.NewFromInt(prevDepr).Div(decimal.NewFromInt(prevPPE + prevDepr))
+	denominator := decimal.NewFromInt(currDepr).Div(decimal.NewFromInt(currPPE + currDepr))
 
 	return numerator.DivRound(denominator, 4)
 }
@@ -75,8 +75,8 @@ func depi(prevDepr int64, prevPPE int64, currDepr int64, currPPE int64) decimal.
 // Sales General and Administrative Expenses Index (SGAI)
 // SGAI = (SG&A Expense t / Sales t) / (SG&A Expense t-1 / Sales t-1)
 func sgai(prevSGA int64, prevSales int64, currSGA int64, currSales int64) decimal.Decimal {
-	numerator := decimal.New(currSGA, 0).Div(decimal.New(currSales, 0))
-	denominator := decimal.New(prevSGA, 0).Div(decimal.New(prevSales, 0))
+	numerator := decimal.NewFromInt(currSGA).Div(decimal.NewFromInt(currSales))
+	denominator := decimal.NewFromInt(prevSGA).Div(decimal.NewFromInt(prevSales))
 
 	return numerator.DivRound(denominator, 4)
 }
@@ -91,8 +91,8 @@ func lvgi(
 	currTLTD int64,
 	currTotalAssets int64,
 ) decimal.Decimal {
-	numerator := decimal.New(currLiabilities+currTLTD, 0).Div(decimal.New(currTotalAssets, 0))
-	denominator := decimal.New(prevLiabilities+prevTLTD, 0).Div(decimal.New(prevTotalAssets, 0))
+	numerator := decimal.NewFromInt(currLiabilities + currTLTD).Div(decimal.NewFromInt(currTotalAssets))
+	denominator := decimal.NewFromInt(prevLiabilities + prevTLTD).Div(decimal.NewFromInt(prevTotalAssets))
 
 	return numerator.DivRound(denominator, 4)
 }
@@ -100,7 +100,7 @@ func lvgi(
 // Total Accruals to Total Assets (TATA)
 // TATA = (Income from Continuing Operations t - Cash Flows from Operations t) / Total Assets t
 func tata(currICO int64, currCFO int64, currTotalAssets int64) decimal.Decimal {
-	return decimal.New(currICO-currCFO, 0).DivRound(decimal.New(currTotalAssets, 0), 4)
+	return decimal.NewFromInt(currICO-currCFO).DivRound(decimal.NewFromInt(currTotalAssets), 4)
 }
 
 /*
