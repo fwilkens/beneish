@@ -116,14 +116,14 @@ M-score =
 0.327 × LVGI
 */
 const BaseMScore = -4.84
-const DSRImod = 0.92
-const GMImod = 0.528
-const AQImod = 0.404
-const SGImod = 0.892
-const DEPImod = 0.115
-const SGAImod = 0.172
-const TATAmod = 4.679
-const LVGImod = 0.327
+const DSRIcoef = 0.92
+const GMIcoef = 0.528
+const AQIcoef = 0.404
+const SGIcoef = 0.892
+const DEPIcoef = 0.115
+const SGAIcoef = 0.172
+const TATAcoef = 4.679
+const LVGIcoef = 0.327
 
 func mScoreCalc(
 	prevNetReceivables int64,
@@ -159,14 +159,14 @@ func mScoreCalc(
 	lvgi := lvgi(prevLiabilities, prevTLTD, prevTotalAssets, currLiabilities, currTLTD, currTotalAssets)
 
 	score := decimal.NewFromFloat(BaseMScore)
-	score = score.Add(decimal.NewFromFloat(DSRImod).Mul(dsri))
-	score = score.Add(decimal.NewFromFloat(GMImod).Mul(gmi))
-	score = score.Add(decimal.NewFromFloat(AQImod).Mul(aqi))
-	score = score.Add(decimal.NewFromFloat(SGImod).Mul(sgi))
-	score = score.Sub(decimal.NewFromFloat(SGAImod).Mul(sgai))
-	score = score.Add(decimal.NewFromFloat(DEPImod).Mul(depi))
-	score = score.Add(decimal.NewFromFloat(TATAmod).Mul(tata))
-	score = score.Sub(decimal.NewFromFloat(LVGImod).Mul(lvgi)).Round(4)
+	score = score.Add(decimal.NewFromFloat(DSRIcoef).Mul(dsri))
+	score = score.Add(decimal.NewFromFloat(GMIcoef).Mul(gmi))
+	score = score.Add(decimal.NewFromFloat(AQIcoef).Mul(aqi))
+	score = score.Add(decimal.NewFromFloat(SGIcoef).Mul(sgi))
+	score = score.Sub(decimal.NewFromFloat(SGAIcoef).Mul(sgai))
+	score = score.Add(decimal.NewFromFloat(DEPIcoef).Mul(depi))
+	score = score.Add(decimal.NewFromFloat(TATAcoef).Mul(tata))
+	score = score.Sub(decimal.NewFromFloat(LVGIcoef).Mul(lvgi)).Round(4)
 
 	m := mscore{
 		dsri:  dsri,
