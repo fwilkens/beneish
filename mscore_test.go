@@ -77,7 +77,8 @@ func TestTata(t *testing.T) {
 	}
 }
 
-// Using the example of Sunbeam, from Beneish
+// Example data from:
+// https://apps.kelley.iu.edu/Beneish/Content/Examples/SunbeamExample.pdf
 func TestMscore(t *testing.T) {
 	mscore := mScoreCalc(
 		2134,  // prevNetReceivables

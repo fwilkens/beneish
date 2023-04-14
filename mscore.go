@@ -16,10 +16,8 @@ type mscore struct {
 	score decimal.Decimal
 }
 
-/*
-https://en.wikipedia.org/wiki/Beneish_M-score
-The Beneish M-score is calculated using 8 variables (financial ratios)
-*/
+// https://en.wikipedia.org/wiki/Beneish_M-score
+// M-score = −4.84 + 0.92 × DSRI + 0.528 × GMI + 0.404 × AQI + 0.892 × SGI + 0.115 × DEPI − 0.172 × SGAI + 4.679 × TATA − 0.327 × LVGI
 
 // Days Sales in Receivables Index
 // (DSRI) DSRI = (Net Receivables t / Sales t) / (Net Receivables t-1 / Sales t-1)
@@ -103,18 +101,6 @@ func tata(currICO int64, currCFO int64, currTotalAssets int64) decimal.Decimal {
 	return decimal.NewFromInt(currICO-currCFO).DivRound(decimal.NewFromInt(currTotalAssets), 4)
 }
 
-/*
-M-score =
-−4.84 +
-0.92 × DSRI +
-0.528 × GMI +
-0.404 × AQI +
-0.892 × SGI +
-0.115 × DEPI −
-0.172 × SGAI +
-4.679 × TATA −
-0.327 × LVGI
-*/
 const BaseMScore = -4.84
 const DSRIcoef = 0.92
 const GMIcoef = 0.528
