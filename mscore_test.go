@@ -8,7 +8,7 @@ import (
 )
 
 func TestDsri(t *testing.T) {
-	result := dsri(90, 100, 150, 200)
+	result := Dsri(90, 100, 150, 200)
 	expected := decimal.NewFromFloat(0.8333)
 
 	if !result.Equals(expected) {
@@ -18,7 +18,7 @@ func TestDsri(t *testing.T) {
 }
 
 func TestGmi(t *testing.T) {
-	result := gmi(90, 100, 60, 50)
+	result := Gmi(90, 100, 60, 50)
 	expected := decimal.NewFromFloat(0.6667)
 
 	if !result.Equals(expected) {
@@ -28,7 +28,7 @@ func TestGmi(t *testing.T) {
 }
 
 func TestAqi(t *testing.T) {
-	result := aqi(100, 60, 600, 130, 60, 700)
+	result := Aqi(100, 60, 600, 130, 60, 700)
 	expected := decimal.NewFromFloat(0.9935)
 
 	if !result.Equals(expected) {
@@ -38,7 +38,7 @@ func TestAqi(t *testing.T) {
 }
 
 func TestSgi(t *testing.T) {
-	result := sgi(1200, 1300)
+	result := Sgi(1200, 1300)
 	expected := decimal.NewFromFloat(1.0833)
 
 	if !result.Equals(expected) {
@@ -48,7 +48,7 @@ func TestSgi(t *testing.T) {
 }
 
 func TestDepi(t *testing.T) {
-	result := depi(1000, 600, 1200, 900)
+	result := Depi(1000, 600, 1200, 900)
 	expected := decimal.NewFromFloat(1.0938)
 
 	if !result.Equals(expected) {
@@ -58,7 +58,7 @@ func TestDepi(t *testing.T) {
 }
 
 func TestLvgi(t *testing.T) {
-	result := lvgi(1200, 400, 1800, 1300, 450, 1700)
+	result := Lvgi(1200, 400, 1800, 1300, 450, 1700)
 	expected := decimal.NewFromFloat(1.1581)
 
 	if !result.Equals(expected) {
@@ -68,7 +68,7 @@ func TestLvgi(t *testing.T) {
 }
 
 func TestTata(t *testing.T) {
-	result := tata(300, 50, 1200)
+	result := Tata(300, 50, 1200)
 	expected := decimal.NewFromFloat(0.2083)
 
 	if !result.Equals(expected) {
@@ -80,7 +80,7 @@ func TestTata(t *testing.T) {
 // Example data from:
 // https://apps.kelley.iu.edu/Beneish/Content/Examples/SunbeamExample.pdf
 func TestMscore(t *testing.T) {
-	mscore := mScoreCalc(
+	mscore := MscoreCalc(
 		2134,  // prevNetReceivables
 		6242,  // prevAssets
 		9006,  // prevCogs

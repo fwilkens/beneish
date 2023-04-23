@@ -7,7 +7,7 @@ A package to calculate [M scores](https://en.wikipedia.org/wiki/Beneish_M-score)
 ### Calculate an M-Score
 
 ```go
-mscore := mScoreCalc(
+mscore := MscoreCalc(
 		2134,  // prevNetReceivables
 		6242,  // prevAssets
 		9006,  // prevCogs
@@ -38,6 +38,6 @@ The returned struct will have the complete M score, as well as the incremental i
 There are functions for each incremental index as well. For example:
 
 ```go
-dsri := dsri(prevNetReceivables, currNetReceivables, prevSales, currSales)
+dsri := Dsri(prevNetReceivables, currNetReceivables, prevSales, currSales)
 ```
 

@@ -4,7 +4,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-type mscore struct {
+type Mscore struct {
 	dsri  decimal.Decimal
 	gmi   decimal.Decimal
 	aqi   decimal.Decimal
@@ -21,7 +21,7 @@ type mscore struct {
 
 // Days Sales in Receivables Index
 // (DSRI) DSRI = (Net Receivables t / Sales t) / (Net Receivables t-1 / Sales t-1)
-func dsri(prevNetReceivables int64, currNetReceivables int64, prevSales int64, currSales int64) decimal.Decimal {
+func Dsri(prevNetReceivables int64, currNetReceivables int64, prevSales int64, currSales int64) decimal.Decimal {
 	numerator := decimal.NewFromInt(currNetReceivables).Div(decimal.NewFromInt(currSales))
 	denominator := decimal.NewFromInt(prevNetReceivables).Div(decimal.NewFromInt(prevSales))
 
@@ -30,7 +30,7 @@ func dsri(prevNetReceivables int64, currNetReceivables int64, prevSales int64, c
 
 // Gross Margin Index (GMI)
 // GMI = [(Sales t-1 - COGS t-1) / Sales t-1] / [(Sales t - COGSt) / Sales t]
-func gmi(prevSales int64, currSales int64, prevCogs int64, currCogs int64) decimal.Decimal {
+func Gmi(prevSales int64, currSales int64, prevCogs int64, currCogs int64) decimal.Decimal {
 	numerator := decimal.NewFromInt(prevSales - prevCogs).Div(decimal.NewFromInt(prevSales))
 	denominator := decimal.NewFromInt(currSales - currCogs).Div(decimal.NewFromInt(currSales))
 
@@ -39,7 +39,7 @@ func gmi(prevSales int64, currSales int64, prevCogs int64, currCogs int64) decim
 
 // Asset Quality Index (AQI)
 // AQI = [1 - (Current Assets t + PP&E t) / Total Assets t] / = [1 - ((Current Assets t-1 + PP&E t-1) / Total Assets t-1)]
-func aqi(
+func Aqi(
 	prevAssets int64,
 	prevPPE int64,
 	prevTotalAssets int64,
@@ -57,13 +57,13 @@ func aqi(
 
 // Sales Growth Index (SGI)
 // SGI = Sales t / Sales t-1
-func sgi(prevSales int64, currSales int64) decimal.Decimal {
+func Sgi(prevSales int64, currSales int64) decimal.Decimal {
 	return decimal.NewFromInt(currSales).DivRound(decimal.NewFromInt(prevSales), 4)
 }
 
 // Depreciation Index (DEPI)
 // DEPI = (Depreciation t-1/ (PP&E t-1 + Depreciation t-1)) / (Depreciationt / (PP&Et + Depreciationt))
-func depi(prevDepr int64, prevPPE int64, currDepr int64, currPPE int64) decimal.Decimal {
+func Depi(prevDepr int64, prevPPE int64, currDepr int64, currPPE int64) decimal.Decimal {
 	numerator := decimal.NewFromInt(prevDepr).Div(decimal.NewFromInt(prevPPE + prevDepr))
 	denominator := decimal.NewFromInt(currDepr).Div(decimal.NewFromInt(currPPE + currDepr))
 
@@ -72,7 +72,7 @@ func depi(prevDepr int64, prevPPE int64, currDepr int64, currPPE int64) decimal.
 
 // Sales General and Administrative Expenses Index (SGAI)
 // SGAI = (SG&A Expense t / Sales t) / (SG&A Expense t-1 / Sales t-1)
-func sgai(prevSGA int64, prevSales int64, currSGA int64, currSales int64) decimal.Decimal {
+func Sgai(prevSGA int64, prevSales int64, currSGA int64, currSales int64) decimal.Decimal {
 	numerator := decimal.NewFromInt(currSGA).Div(decimal.NewFromInt(currSales))
 	denominator := decimal.NewFromInt(prevSGA).Div(decimal.NewFromInt(prevSales))
 
@@ -81,7 +81,7 @@ func sgai(prevSGA int64, prevSales int64, currSGA int64, currSales int64) decima
 
 // Leverage Index (LVGI)
 // LVGI = [(Current Liabilities t + Total Long Term Debt t) / Total Assets t] / [(Current Liabilities t-1 + Total Long Term Debt t-1) / Total Assets t-1]
-func lvgi(
+func Lvgi(
 	prevLiabilities int64,
 	prevTLTD int64,
 	prevTotalAssets int64,
@@ -97,7 +97,7 @@ func lvgi(
 
 // Total Accruals to Total Assets (TATA)
 // TATA = (Income from Continuing Operations t - Cash Flows from Operations t) / Total Assets t
-func tata(currICO int64, currCFO int64, currTotalAssets int64) decimal.Decimal {
+func Tata(currICO int64, currCFO int64, currTotalAssets int64) decimal.Decimal {
 	return decimal.NewFromInt(currICO-currCFO).DivRound(decimal.NewFromInt(currTotalAssets), 4)
 }
 
@@ -111,7 +111,7 @@ const SGAIcoef = 0.172
 const TATAcoef = 4.679
 const LVGIcoef = 0.327
 
-func mScoreCalc(
+func MscoreCalc(
 	prevNetReceivables int64,
 	prevAssets int64,
 	prevCogs int64,
@@ -134,15 +134,15 @@ func mScoreCalc(
 	currTLTD int64,
 	currICO int64,
 	currCFO int64,
-) *mscore {
-	dsri := dsri(prevNetReceivables, currNetReceivables, prevSales, currSales)
-	gmi := gmi(prevSales, currSales, prevCogs, currCogs)
-	aqi := aqi(prevAssets, prevPPE, prevTotalAssets, currAssets, currPPE, currTotalAssets)
-	sgi := sgi(prevSales, currSales)
-	sgai := sgai(prevSGA, prevSales, currSGA, currSales)
-	depi := depi(prevDepr, prevPPE, currDepr, currPPE)
-	tata := tata(currICO, currCFO, currTotalAssets)
-	lvgi := lvgi(prevLiabilities, prevTLTD, prevTotalAssets, currLiabilities, currTLTD, currTotalAssets)
+) *Mscore {
+	dsri := Dsri(prevNetReceivables, currNetReceivables, prevSales, currSales)
+	gmi := Gmi(prevSales, currSales, prevCogs, currCogs)
+	aqi := Aqi(prevAssets, prevPPE, prevTotalAssets, currAssets, currPPE, currTotalAssets)
+	sgi := Sgi(prevSales, currSales)
+	sgai := Sgai(prevSGA, prevSales, currSGA, currSales)
+	depi := Depi(prevDepr, prevPPE, currDepr, currPPE)
+	tata := Tata(currICO, currCFO, currTotalAssets)
+	lvgi := Lvgi(prevLiabilities, prevTLTD, prevTotalAssets, currLiabilities, currTLTD, currTotalAssets)
 
 	score := decimal.NewFromFloat(BaseMScore)
 	score = score.Add(decimal.NewFromFloat(DSRIcoef).Mul(dsri))
@@ -154,7 +154,7 @@ func mScoreCalc(
 	score = score.Add(decimal.NewFromFloat(TATAcoef).Mul(tata))
 	score = score.Sub(decimal.NewFromFloat(LVGIcoef).Mul(lvgi)).Round(4)
 
-	m := mscore{
+	m := Mscore{
 		dsri:  dsri,
 		gmi:   gmi,
 		aqi:   aqi,
