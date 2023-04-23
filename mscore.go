@@ -5,15 +5,15 @@ import (
 )
 
 type Mscore struct {
-	dsri  decimal.Decimal
-	gmi   decimal.Decimal
-	aqi   decimal.Decimal
-	sgi   decimal.Decimal
-	depi  decimal.Decimal
-	sgai  decimal.Decimal
-	lvgi  decimal.Decimal
-	tata  decimal.Decimal
-	score decimal.Decimal
+	Dsri  decimal.Decimal
+	Gmi   decimal.Decimal
+	Aqi   decimal.Decimal
+	Sgi   decimal.Decimal
+	Depi  decimal.Decimal
+	Sgai  decimal.Decimal
+	Lvgi  decimal.Decimal
+	Tata  decimal.Decimal
+	Score decimal.Decimal
 }
 
 // https://en.wikipedia.org/wiki/Beneish_M-score
@@ -155,15 +155,15 @@ func MscoreCalc(
 	score = score.Sub(decimal.NewFromFloat(LVGIcoef).Mul(lvgi)).Round(4)
 
 	m := Mscore{
-		dsri:  dsri,
-		gmi:   gmi,
-		aqi:   aqi,
-		sgi:   sgi,
-		depi:  depi,
-		sgai:  sgai,
-		lvgi:  lvgi,
-		tata:  tata,
-		score: score,
+		Dsri:  dsri,
+		Gmi:   gmi,
+		Aqi:   aqi,
+		Sgi:   sgi,
+		Depi:  depi,
+		Sgai:  sgai,
+		Lvgi:  lvgi,
+		Tata:  tata,
+		Score: score,
 	}
 	return &m
 }

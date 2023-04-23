@@ -106,49 +106,49 @@ func TestMscore(t *testing.T) {
 	)
 
 	dsriExpected := decimal.NewFromFloat(1.1670)
-	if !mscore.dsri.Equals(dsriExpected) {
-		t.Errorf("expected dsri of %q, got %q", dsriExpected, mscore.dsri)
+	if !mscore.Dsri.Equals(dsriExpected) {
+		t.Errorf("expected dsri of %q, got %q", dsriExpected, mscore.Dsri)
 	}
 
 	gmiExpected := decimal.NewFromFloat(0.3002)
-	if !mscore.gmi.Equals(gmiExpected) {
-		t.Errorf("expected gmi of %q, got %q", gmiExpected, mscore.gmi)
+	if !mscore.Gmi.Equals(gmiExpected) {
+		t.Errorf("expected gmi of %q, got %q", gmiExpected, mscore.Gmi)
 	}
 
 	aqiExpected := decimal.NewFromFloat(0.9282)
-	if !mscore.aqi.Equals(aqiExpected) {
-		t.Errorf("expected aqi of %q, got %q", aqiExpected, mscore.aqi)
+	if !mscore.Aqi.Equals(aqiExpected) {
+		t.Errorf("expected aqi of %q, got %q", aqiExpected, mscore.Aqi)
 	}
 
 	sgiExpected := decimal.NewFromFloat(1.1870)
-	if !mscore.sgi.Equals(sgiExpected) {
-		t.Errorf("expected sgi of %q, got %q", sgiExpected, mscore.sgi)
+	if !mscore.Sgi.Equals(sgiExpected) {
+		t.Errorf("expected sgi of %q, got %q", sgiExpected, mscore.Sgi)
 	}
 
 	sgaiExpected := decimal.NewFromFloat(0.5157)
-	if !mscore.sgai.Equals(sgaiExpected) {
-		t.Errorf("expected sgai of %q, got %q", sgaiExpected, mscore.sgai)
+	if !mscore.Sgai.Equals(sgaiExpected) {
+		t.Errorf("expected sgai of %q, got %q", sgaiExpected, mscore.Sgai)
 	}
 
 	depiExpected := decimal.NewFromFloat(1.2831)
-	if !mscore.depi.Equals(depiExpected) {
-		t.Errorf("expected depi of %q, got %q", depiExpected, mscore.depi)
+	if !mscore.Depi.Equals(depiExpected) {
+		t.Errorf("expected depi of %q, got %q", depiExpected, mscore.Depi)
 	}
 
 	tataExpected := decimal.NewFromFloat(0.1050)
-	if !mscore.tata.Equals(tataExpected) {
-		t.Errorf("expected tata of %q, got %q", tataExpected, mscore.tata)
+	if !mscore.Tata.Equals(tataExpected) {
+		t.Errorf("expected tata of %q, got %q", tataExpected, mscore.Tata)
 	}
 
 	lvgiExpected := decimal.NewFromFloat(0.7955)
-	if !mscore.lvgi.Equals(lvgiExpected) {
-		t.Errorf("expected lvgi of %q, got %q", lvgiExpected, mscore.lvgi)
+	if !mscore.Lvgi.Equals(lvgiExpected) {
+		t.Errorf("expected lvgi of %q, got %q", lvgiExpected, mscore.Lvgi)
 	}
 
 	mExpected := decimal.NewFromFloat(-1.8840)
 
-	if !mscore.score.Equals(mExpected) {
-		fmt.Println(mscore.score)
-		t.Errorf("expected %q, got %q", mExpected, mscore.score)
+	if !mscore.Score.Equals(mExpected) {
+		fmt.Println(mscore.Score)
+		t.Errorf("expected %q, got %q", mExpected, mscore.Score)
 	}
 }
